@@ -51,7 +51,11 @@ export default function DashboardPage() {
               </div>
             </CardContent>
             <CardFooter>
-              <Button className="w-full">Place Bid</Button>
+              <Button className="w-full" asChild>
+                <Link href={`/dashboard/auctions/${auction.id}`}>
+                  Place Bid
+                </Link>
+              </Button>
             </CardFooter>
           </Card>
         ))}

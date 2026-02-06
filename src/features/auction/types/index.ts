@@ -4,8 +4,8 @@ export interface Auction {
   id: string;
   title: string;
   description: string;
-  currentPrice: number;
-  startingPrice: number;
+  currentPrice: string;
+  startingPrice: string;
   endTime: string;
   imageUrl?: string; // Optional if we haven't added images yet
   status: "ACTIVE" | "CLOSED" | "SOLD";
