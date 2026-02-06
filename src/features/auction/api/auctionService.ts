@@ -10,7 +10,7 @@ export const auctionService = {
   },
 
   getById: async (id: string) => {
-    const response = await api.get<{ success: boolean; data: Auction}>(`/auction/${id}`);
+    const response = await api.get<{ success: boolean; data: Auction}>(`/auctions/${id}`);
     return response.data;
   },
   
