@@ -32,9 +32,6 @@ export const Navbar = () => {
       {/* Right Side Actions */}
       <div className="flex items-center gap-4">
         <Button variant="ghost" asChild>
-          <Link href="/dashboard/auctions">Auctions</Link>
-        </Button>
-        <Button variant="ghost" asChild>
           <Link href="/dashboard/my-bids">My Bids</Link>
         </Button>
 

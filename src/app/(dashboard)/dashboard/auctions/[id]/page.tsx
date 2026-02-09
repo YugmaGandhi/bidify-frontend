@@ -48,7 +48,7 @@ export default function AuctionDetailPage() {
       console.log("⚡ Real-time update:", payload);
       
       // Notify the user
-      toast.info(`New bid placed: $${payload.latestBid.amount}`);
+      toast.info(`New bid placed: $${payload.amount}`);
 
       // Optimistically update the cache so the UI reflects the price instantly
       queryClient.setQueryData(["auction", auctionId], (oldData: any) => {
@@ -58,18 +58,18 @@ export default function AuctionDetailPage() {
           ...oldData,
           data: {
             ...oldData.data,
-            currentPrice: payload.currentPrice,
+            currentPrice: payload.amount,
             // If you wanted to update a bid history list, you would do it here too
           }
         };
       });
     };
 
-    socket.on("bid:update", handleBidUpdate);
+    socket.on("bid_update", handleBidUpdate);
 
     // Cleanup on unmount
     return () => {
-      socket.off("bid:update", handleBidUpdate);
+      socket.off("bid_update", handleBidUpdate);
       socket.emit("leave_auction", auctionId);
       // We generally don't disconnect the socket entirely if navigation is frequent,
       // but for this specific implementation, it's safer to disconnect or leave room.
