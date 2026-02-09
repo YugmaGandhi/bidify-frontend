@@ -11,6 +11,7 @@ import { bidService } from "../api/bidService";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Form, FormControl, FormField, FormItem, FormMessage } from "@/components/ui/form";
+import { useQueryClient } from "@tanstack/react-query";
 
 // 1. Define Schema
 const bidSchema = z.object({
@@ -27,6 +28,7 @@ interface PlaceBidFormProps {
 
 export const PlaceBidForm = ({ auctionId, currentPrice }: PlaceBidFormProps) => {
   const [isLoading, setIsLoading] = useState(false);
+  const queryClient = useQueryClient();
   const suggestedBid = currentPrice + 10;
 
   // 3. THE FIX: Remove <{ amount: number }>
@@ -50,6 +52,16 @@ export const PlaceBidForm = ({ auctionId, currentPrice }: PlaceBidFormProps) => 
       await bidService.placeBid(auctionId, values.amount);
       toast.success("Bid placed successfully!");
       form.setValue("amount", values.amount + 10);
+
+      // 1. Force the Auction Detail page to refresh (Double safety with Socket)
+      await queryClient.invalidateQueries({ queryKey: ["auction", auctionId] });
+
+      // 2. Force the "My Bids" list to refresh so the new bid appears there
+      await queryClient.invalidateQueries({ queryKey: ["my-bids"] });
+      
+      // 3. Force the Dashboard list to refresh (to show new price on card)
+      await queryClient.invalidateQueries({ queryKey: ["auctions"] });
+
     } catch (error: any) {
       toast.error(error.response?.data?.message || "Failed to place bid");
     } finally {
